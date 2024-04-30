@@ -161,6 +161,8 @@ public class Minecraft {
         v1_19_R3(11904),
 
         v1_20_R1(12001),
+        v1_20_R2(12002),
+        v1_20_R3(12003),
         v1_20_R4(12006),
 
         /// (Potentially) Upcoming versions
@@ -238,12 +240,11 @@ public class Minecraft {
 
         @Deprecated
         public static Version getVersion() {
-            String name = "org.bukkit.craftbukkit.v1_20_R4";
-            String versionPackage = name.substring(name.lastIndexOf('.') + 1);
+            String versionPackage = getVersionPackage();
             for (Version version : values()) {
                 if (version.matchesPackageName(versionPackage)) {return version;}
             }
-            System.err.println("[ReflectionHelper] Failed to find version enum for '" + name + "'/'" + versionPackage + "'");
+            System.err.println("[ReflectionHelper] Failed to find version enum for '" + versionPackage + "'");
 
             System.out.println("[ReflectionHelper] Generating dynamic constant...");
             Matcher matcher = NUMERIC_VERSION_PATTERN.matcher(versionPackage);
@@ -289,6 +290,16 @@ public class Minecraft {
             }
 
             return UNKNOWN;
+        }
+
+        private static String getVersionPackage() {
+            try {
+                Class<?> paperMappingEnvironment = Class.forName("io.papermc.paper.util.MappingEnvironment");
+                Field fieldCbVersion = paperMappingEnvironment.getField("LEGACY_CB_VERSION");
+                return (String) fieldCbVersion.get(null);
+            } catch (Exception e) {
+                return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+            }
         }
 
         @Override
