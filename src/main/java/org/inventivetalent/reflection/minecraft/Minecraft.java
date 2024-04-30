@@ -160,9 +160,10 @@ public class Minecraft {
         v1_19_R2(11902),
         v1_19_R3(11904),
 
-        /// (Potentially) Upcoming versions
         v1_20_R1(12001),
+        v1_20_R4(12006),
 
+        /// (Potentially) Upcoming versions
         v1_21_R1(12101),
         ;
 
@@ -237,7 +238,7 @@ public class Minecraft {
 
         @Deprecated
         public static Version getVersion() {
-            String name = Bukkit.getServer().getClass().getPackage().getName();
+            String name = "org.bukkit.craftbukkit.v1_20_R4";
             String versionPackage = name.substring(name.lastIndexOf('.') + 1);
             for (Version version : values()) {
                 if (version.matchesPackageName(versionPackage)) {return version;}
